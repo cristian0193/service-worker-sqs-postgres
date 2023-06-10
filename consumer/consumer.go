@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"go.uber.org/zap"
-	sqs2 "service-template-golang/clients/services"
+	sqs2 "service-template-golang/clients/awssqs"
 	"service-template-golang/domain"
 	"sync"
 )

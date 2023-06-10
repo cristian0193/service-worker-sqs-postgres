@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"go.uber.org/zap"
-	"service-template-golang/clients/services"
+	"service-template-golang/clients/awssqs"
 	"service-template-golang/consumer"
 	"service-template-golang/domain"
 )
@@ -22,9 +22,9 @@ func NewSQSConsumer(logger *zap.SugaredLogger, config *Configuration) (domain.So
 
 	sqsSession := session.Must(session.NewSession(sqsSessionConfig))
 
-	sqs, err := services.NewSQSClient(sqsSession, config.SQSUrl, config.SQSMaxMessages, config.SQSVisibilityTimeout)
+	sqs, err := awssqs.NewSQSClient(sqsSession, config.SQSUrl, config.SQSMaxMessages, config.SQSVisibilityTimeout)
 	if err != nil {
-		return nil, fmt.Errorf("error services.NewSQSClient: %w", err)
+		return nil, fmt.Errorf("error awssqs.NewSQSClient: %w", err)
 	}
 
 	source, err := consumer.New(sqs, logger, config.SQSMaxMessages)
