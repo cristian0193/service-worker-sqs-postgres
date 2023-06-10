@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"os/signal"
-	"service-template-golang/builder"
+	"service-template-golang/cmd/builder"
 	"syscall"
 )
 
