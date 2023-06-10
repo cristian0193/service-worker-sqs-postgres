@@ -37,17 +37,14 @@ func (s *SQSSource) Consume() <-chan *domain.Event {
 			if s.closed {
 				break
 			}
-
 			messages, err := s.sqs.GetMessages()
 			if err != nil {
 				s.log.Errorf("Error getting messages from SQS: %v", err)
 				continue
 			}
-
 			if len(messages) == 0 {
 				s.log.Debug("No messages found from SQS")
 			}
-
 			for _, msg := range messages {
 				s.processMessage(msg, out)
 			}
@@ -66,7 +63,6 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 		s.log.Errorf("Error processing message from SQS: %v", err)
 		return
 	}
-
 	// get retry number from message
 	retry := "0"
 	val, ok := msg.Attributes[sqs.MessageSystemAttributeNameApproximateReceiveCount]
@@ -78,6 +74,7 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 	logger.Infof("Start to process SQS event")
 
 	event := &domain.Event{
+		ID:            *msg.MessageId,
 		Retry:         retry,
 		Records:       records,
 		OriginalEvent: msg,

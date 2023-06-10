@@ -9,45 +9,27 @@ import (
 	"service-template-golang/clients/services"
 	"service-template-golang/consumer"
 	"service-template-golang/domain"
-	env "service-template-golang/utils"
 )
 
-func NewSQSConsumer(logger *zap.SugaredLogger) (domain.Source, error) {
-	region, err := env.GetString("AWS_REGION")
-	if err != nil {
-		return nil, err
+func NewSQSConsumer(logger *zap.SugaredLogger, config *Configuration) (domain.Source, error) {
+
+	sqsSessionConfig := &aws.Config{
+		Region:      aws.String(config.Region),
+		Endpoint:    aws.String(config.SQSUrl),
+		MaxRetries:  aws.Int(3),
+		Credentials: credentials.NewStaticCredentials(config.AccessKey, config.SecretKey, ""),
 	}
 
-	dqlqURL, err := env.GetString("DELTA_SQS_URL")
-	if err != nil {
-		return nil, err
-	}
-
-	logger.Infof("dead letter queue SQS url [%s] Region [%s]", dqlqURL, region)
-
-	sqsMaxMessages, err := env.GetInt("DELTA_SQS_MAX_MESSAGES")
-	if err != nil {
-		return nil, err
-	}
-
-	sqsVisibilityTimeout, err := env.GetInt("DELTA_SQS_VISIBILITY_TIMEOUT")
-	if err != nil {
-		return nil, err
-	}
-
-	sqsSessionConfig := &aws.Config{Region: aws.String(region)}
-	sqsSessionConfig.WithCredentials(credentials.NewStaticCredentials("id", "temp", "temp"))
-	sqsSessionConfig.WithEndpoint("http://localhost:4576")
 	sqsSession := session.Must(session.NewSession(sqsSessionConfig))
 
-	sqs, err := services.NewSQSClient(sqsSession, dqlqURL, sqsMaxMessages, sqsVisibilityTimeout)
+	sqs, err := services.NewSQSClient(sqsSession, config.SQSUrl, config.SQSMaxMessages, config.SQSVisibilityTimeout)
 	if err != nil {
-		return nil, fmt.Errorf("sqsclient.NewWithSession: %w", err)
+		return nil, fmt.Errorf("error services.NewSQSClient: %w", err)
 	}
 
-	source, err := consumer.New(sqs, logger, 5)
+	source, err := consumer.New(sqs, logger, config.SQSMaxMessages)
 	if err != nil {
-		return nil, fmt.Errorf("sqssource.New: %w", err)
+		return nil, fmt.Errorf("error consumer.New: %w", err)
 	}
 
 	return source, nil

@@ -32,13 +32,12 @@ func (p *Processor) Start() {
 func (p *Processor) handleEvent(event *domain.Event) {
 	event.Log.Infof("event started")
 	start := time.Now()
-	key := fmt.Sprintf("%s", event.ID)
+	//key := fmt.Sprintf("%s", event.ID)
 
 	for _, record := range event.Records {
-		fmt.Print(key, " - ", record)
+		event.Log.Infof(fmt.Sprint(record))
 	}
 
-	// notify that an event of consolidate is processed.
 	p.Source.EventProcessed()
 	event.Log.Infof("Consolidate event finished in %v", time.Since(start))
 }

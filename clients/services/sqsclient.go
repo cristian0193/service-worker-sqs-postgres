@@ -36,7 +36,7 @@ func (s *ClientSQS) GetMessages() ([]*sqs.Message, error) {
 		MessageAttributeNames: []*string{
 			aws.String("All"),
 		},
-		WaitTimeSeconds:   aws.Int64(30),
+		WaitTimeSeconds:   aws.Int64(20),
 		VisibilityTimeout: aws.Int64(s.visibilityTimeout),
 	}
 

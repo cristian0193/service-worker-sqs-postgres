@@ -1,8 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"os/signal"
 	"service-template-golang/builder"
+	"syscall"
 )
 
 func main() {
@@ -11,12 +13,12 @@ func main() {
 	logger.Info("Starting service-template-golang ...")
 	defer builder.Sync(logger)
 
-	_, err := builder.LoadConfig()
+	config, err := builder.LoadConfig()
 	if err != nil {
 		logger.Fatalf("Error in LoadConfig : %v", err)
 	}
 
-	consumer, err := builder.NewSQSConsumer(logger)
+	consumer, err := builder.NewSQSConsumer(logger, config)
 	if err != nil {
 		logger.Fatalf("Error in Processor : %v", err)
 	}
@@ -26,8 +28,17 @@ func main() {
 		logger.Fatalf("Error in Processor : %v", err)
 	}
 	go processor.Start()
-	_ = processor.Stop()
 
-	fmt.Print(processor)
+	// Graceful shutdown
+	sigQuit := make(chan os.Signal, 1)
+	signal.Notify(sigQuit, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGABRT, syscall.SIGTERM)
+	sig := <-sigQuit
+
+	logger.Infof("Shutting down server with signal [%s] ...", sig.String())
+	if err = consumer.Close(); err != nil {
+		logger.Error("consumer.Stop: %v", err)
+	}
+
+	logger.Info("service-template-golang ended")
 
 }
