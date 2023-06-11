@@ -3,19 +3,22 @@ package processor
 import (
 	"fmt"
 	"go.uber.org/zap"
+	"service-template-golang/database"
 	"service-template-golang/domain"
 	"time"
 )
 
 type Processor struct {
-	Logger *zap.SugaredLogger
-	Source domain.Source
+	Logger   *zap.SugaredLogger
+	Source   domain.Source
+	ClientDB *database.ClientDB
 }
 
-func New(logger *zap.SugaredLogger, source domain.Source) (*Processor, error) {
+func New(logger *zap.SugaredLogger, source domain.Source, rds *database.ClientDB) (*Processor, error) {
 	return &Processor{
-		Logger: logger,
-		Source: source,
+		Logger:   logger,
+		Source:   source,
+		ClientDB: rds,
 	}, nil
 }
 
@@ -32,7 +35,6 @@ func (p *Processor) Start() {
 func (p *Processor) handleEvent(event *domain.Event) {
 	event.Log.Infof("event started")
 	start := time.Now()
-	//key := fmt.Sprintf("%s", event.ID)
 
 	for _, record := range event.Records {
 		event.Log.Infof(fmt.Sprint(record))
@@ -44,8 +46,5 @@ func (p *Processor) handleEvent(event *domain.Event) {
 
 // Stop stops the Processor execution.
 func (p *Processor) Stop() error {
-	if err := p.Source.Close(); err != nil {
-		return err
-	}
-	return nil
+	return p.Source.Close()
 }

@@ -12,6 +12,11 @@ type Configuration struct {
 	SQSUrl               string
 	SQSMaxMessages       int
 	SQSVisibilityTimeout int
+	DBPort               string
+	DBHost               string
+	DBName               string
+	DBUsername           string
+	DBPassword           string
 }
 
 func LoadConfig() (*Configuration, error) {
@@ -60,6 +65,31 @@ func LoadConfig() (*Configuration, error) {
 		return nil, err
 	}
 
+	dbPort, err := env.GetString("DB_PORT")
+	if err != nil {
+		return nil, err
+	}
+
+	dbHost, err := env.GetString("DB_HOST")
+	if err != nil {
+		return nil, err
+	}
+
+	dbName, err := env.GetString("DB_NAME")
+	if err != nil {
+		return nil, err
+	}
+
+	dbUsername, err := env.GetString("DB_USERNAME")
+	if err != nil {
+		return nil, err
+	}
+
+	dbPassword, err := env.GetString("DB_PASSWORD")
+	if err != nil {
+		return nil, err
+	}
+
 	return &Configuration{
 		Port:                 port,
 		ApplicationID:        applicationID,
@@ -70,5 +100,10 @@ func LoadConfig() (*Configuration, error) {
 		SQSUrl:               sqsUrl,
 		SQSMaxMessages:       sqsMaxMessages,
 		SQSVisibilityTimeout: sqsVisibilityTimeout,
+		DBPort:               dbPort,
+		DBHost:               dbHost,
+		DBName:               dbName,
+		DBUsername:           dbUsername,
+		DBPassword:           dbPassword,
 	}, nil
 }

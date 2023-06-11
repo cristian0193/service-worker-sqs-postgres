@@ -4,23 +4,22 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"go.uber.org/zap"
-	sqs2 "service-template-golang/clients/awssqs"
+	"service-template-golang/clients/awssqs"
 	"service-template-golang/domain"
 	"sync"
 )
 
 // SQSSource event stream representation to SQS.
 type SQSSource struct {
-	sqs         *sqs2.ClientSQS
+	sqs         *awssqs.ClientSQS
 	log         *zap.SugaredLogger
 	maxMessages int
 	closed      bool
 	wg          sync.WaitGroup
-	wgBatch     sync.WaitGroup
 }
 
 // New return a event stream instance from SQS.
-func New(sqsClient *sqs2.ClientSQS, logger *zap.SugaredLogger, maxMessages int) (*SQSSource, error) {
+func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int) (*SQSSource, error) {
 	return &SQSSource{
 		sqs:         sqsClient,
 		log:         logger,
@@ -56,6 +55,18 @@ func (s *SQSSource) Consume() <-chan *domain.Event {
 	return out
 }
 
+// EventProcessed notify that event of consolidate file was processed.
+func (s *SQSSource) EventProcessed() {
+	s.wg.Done()
+}
+
+// Close the event stream.
+func (s *SQSSource) Close() error {
+	s.closed = true
+	s.wg.Wait()
+	return nil
+}
+
 func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 	var records []map[string]interface{}
 	err := json.Unmarshal([]byte(*msg.Body), &records)
@@ -83,16 +94,4 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 	s.wg.Add(1)
 	logger.Infof("Event produced for ID = %s)", event.ID)
 	out <- event
-}
-
-// EventProcessed notify that event of consolidate file was processed.
-func (s *SQSSource) EventProcessed() {
-	s.wg.Done()
-}
-
-// Close the event stream.
-func (s *SQSSource) Close() error {
-	s.closed = true
-	s.wg.Wait()
-	return nil
 }
