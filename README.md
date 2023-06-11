@@ -84,6 +84,12 @@ AWS_REGION=us-east-1
 AWS_SQS_URL=https://sqs.us-east-1.amazonaws.com/XXXXXXXXX/sqs-service-template-golang
 AWS_SQS_MAX_MESSAGES=10
 AWS_SQS_VISIBILITY_TIMEOUT=60
+
+DB_PORT=
+DB_HOST=
+DB_NAME=
+DB_USERNAME=
+DB_PASSWORD=
 ```
 
 <a name="local"></a>
