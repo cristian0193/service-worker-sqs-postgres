@@ -101,6 +101,7 @@ Luego de tener instalado los servicios externos, ejecute el script de base de da
 
     1. Instalacion postgres local o aws (rds)
         - docker pull postgres
+        - https://aws.amazon.com/es/rds/
 
     2. Creacion de SQS en AWS
         - https://aws.amazon.com/es/sqs/
