@@ -1,4 +1,4 @@
-# Servive Template Golang
+# Service Template Golang
 
 ## Tabla de contenido
 1. [Contexto](#contexto)
@@ -45,8 +45,11 @@ Las siguientes dependencias se utilizan en el desarrollo para llevar a cabo depl
 
 **Servicios AWS**
 
-* [RDS](https://aws.amazon.com/es/rds/)
 * [SQS](https://aws.amazon.com/es/sqs/)
+
+**Bases de datos**
+
+* [Postgresql](https://www.postgresql.org/)
 
 <a name="arquitectura"></a>
 # Arquitectura 🏢
@@ -74,14 +77,14 @@ Para la fase de despliegue a nivel local, se utilizaron algunas herramientas que
 
 ```
 APPLICATION_ID=service-template-golang
-SERVER_PORT=8080
+SERVER_PORT=
 LOG_LEVEL=INFO
 
 AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
-AWS_REGION=us-east-1
+AWS_REGION=
 
-AWS_SQS_URL=https://sqs.us-east-1.amazonaws.com/XXXXXXXXX/sqs-service-template-golang
+AWS_SQS_URL=
 AWS_SQS_MAX_MESSAGES=10
 AWS_SQS_VISIBILITY_TIMEOUT=60
 
@@ -106,29 +109,28 @@ Luego de tener instalado los servicios externos, ejecute el script de base de da
     2. Creacion de SQS en AWS
         - https://aws.amazon.com/es/sqs/
 
-    3. Ejecutar script 
-        - ./service-template-golang/database/script.sql
+    3. La automigracion a nivel de gorm a las base de datos esta activa
 
     4. Definir las variables de entorno definidas en (Despliegues)
 
     6. Ejecutar el comando 'go run main.go'
 
-    7. Puerto :3000 run
+    7. Puerto :8080 run
 
 <a name="endpoints"></a>
 # Endpoints
 
-- **GET**    http://localhost:8080/sqs/data
+- **GET**    http://localhost:8080/sqs/:id
 ```
-curl --location --request GET 'http://localhost:8080/sqs/data'
+curl --location --request GET 'http://localhost:8080/sqs/:id'
 ```
 
 - **Response**
 ```
   {
-    "id": "c803ce21-6356-491d-94b3-aaf63acae7f6",
-    "msg": "Hello World",
-    "date": "2023-01-01T00:00:00"
+    "id": "7a312c5a-e69e-4935-9b33-5dc33919a76f",
+    "message": "Hola Mundo!!",
+    "date": "2023-06-13 02:47:41.387484 -0500 -05 m=+12.382310052"
   }
 ```
 
@@ -140,11 +142,9 @@ curl --location --request GET 'http://localhost:8080/sqs/data'
 
 - **Message**
 ```
-  [
     {
       "msg": "Hello World"
     }
-  ]
 ```
 
 # Author 🧑‍💻

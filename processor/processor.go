@@ -1,7 +1,6 @@
 package processor
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"service-template-golang/database"
 	"service-template-golang/domain"
@@ -34,14 +33,10 @@ func (p *Processor) Start() {
 // handleEvent is the entry point to handle consolidate/upload event.
 func (p *Processor) handleEvent(event *domain.Event) {
 	event.Log.Infof("event started")
-	start := time.Now()
-
-	for _, record := range event.Records {
-		event.Log.Infof(fmt.Sprint(record))
+	if err := p.Source.Processed(event); err != nil {
+		event.Log.Errorf("Event processed. %v", err)
 	}
-
-	p.Source.EventProcessed()
-	event.Log.Infof("Consolidate event finished in %v", time.Since(start))
+	event.Log.Infof("Consolidate event finished in %v", time.Since(time.Now()))
 }
 
 // Stop stops the Processor execution.

@@ -1,0 +1,34 @@
+package entity
+
+import "service-template-golang/domain"
+
+// EventsService defines the interface of the methods that will be implemented in the event service.
+type EventsService interface {
+	GetID(ID string) (*Events, error)
+}
+
+// EventsRepository defines the interface of the methods that will be implemented in the event repository.
+type EventsRepository interface {
+	GetID(ID string) (*Events, error)
+}
+
+// Events represents the entity.
+type Events struct {
+	ID      string `gorm:"NULL;TYPE:VARCHAR(200);COLUMN:id" json:"id"`
+	Message string `gorm:"NULL;TYPE:VARCHAR(200);COLUMN:message" json:"message"`
+	Date    string `gorm:"NULL;TYPE:VARCHAR(200);COLUMN:date" json:"date"`
+}
+
+// TableName definition name for table .
+func (Events) TableName() string {
+	return "events"
+}
+
+// ToDomainEvents convert domain event to model the database events .
+func (e Events) ToDomainEvents() *domain.Events {
+	return &domain.Events{
+		ID:      e.ID,
+		Message: e.Message,
+		Date:    e.Date,
+	}
+}

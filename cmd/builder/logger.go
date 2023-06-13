@@ -1,8 +1,6 @@
 package builder
 
 import (
-	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -29,13 +27,4 @@ func NewLogger() *zap.SugaredLogger {
 
 func Sync(log *zap.SugaredLogger) {
 	_ = log.Sync()
-}
-
-func LogLevel(config Configuration) zapcore.Level {
-	var level zapcore.Level
-	err := json.Unmarshal([]byte(fmt.Sprint(config.LogLevel)), &level)
-	if err != nil {
-		return zapcore.InfoLevel
-	}
-	return level
 }

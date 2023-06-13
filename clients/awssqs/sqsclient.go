@@ -47,3 +47,14 @@ func (s *ClientSQS) GetMessages() ([]*sqs.Message, error) {
 
 	return res.Messages, nil
 }
+
+// DeleteMessage deletes messages from SQS.
+func (s *ClientSQS) DeleteMessage(msg *sqs.Message) error {
+	params := &sqs.DeleteMessageInput{
+		QueueUrl:      aws.String(s.url),
+		ReceiptHandle: msg.ReceiptHandle,
+	}
+	_, err := s.api.DeleteMessage(params)
+
+	return err
+}

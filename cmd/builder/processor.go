@@ -7,6 +7,6 @@ import (
 	"service-template-golang/processor"
 )
 
-func NewProcessor(logger *zap.SugaredLogger, source domain.Source, rds *database.ClientDB) (*processor.Processor, error) {
-	return processor.New(logger, source, rds)
+func NewProcessor(logger *zap.SugaredLogger, source domain.Source, db *database.ClientDB) (*processor.Processor, error) {
+	return processor.New(logger, source, db)
 }

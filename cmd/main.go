@@ -5,6 +5,9 @@ import (
 	"os/signal"
 	"service-template-golang/cmd/builder"
 	"service-template-golang/http"
+	"service-template-golang/http/controllers"
+	"service-template-golang/http/repository"
+	"service-template-golang/http/services"
 	"syscall"
 )
 
@@ -28,26 +31,35 @@ func main() {
 	}
 
 	// db is initialized
-	rds, err := builder.NewDB(config)
+	db, err := builder.NewDB(config)
 	if err != nil {
 		logger.Fatalf("error in RDS : %v", err)
 	}
 
 	// sqs is initialized
-	sqs, err := builder.NewSQS(logger, config, session)
+	sqs, err := builder.NewSQS(logger, config, session, db)
 	if err != nil {
 		logger.Fatalf("error in SQS : %v", err)
 	}
 
 	// processor is initialized
-	processor, err := builder.NewProcessor(logger, sqs, rds)
+	processor, err := builder.NewProcessor(logger, sqs, db)
 	if err != nil {
 		logger.Fatalf("error in Processor : %v", err)
 	}
 	go processor.Start()
 
+	// repositories are initialized
+	eventsRepository := repository.NewEventsRepository(db)
+
+	// services are initialized
+	eventsService := services.NewEventsService(eventsRepository)
+
+	// controllers are initialized
+	eventsController := controllers.NewEventsController(eventsService)
+
 	// server is initialized
-	server := http.NewServer(config.Port)
+	server := http.NewServer(config.Port, eventsController)
 	if err = server.Start(); err != nil {
 		logger.Fatalf("error Starting Server: %v", err)
 	}

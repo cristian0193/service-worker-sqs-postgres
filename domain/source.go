@@ -6,7 +6,7 @@ import "go.uber.org/zap"
 type Event struct {
 	ID            string
 	Retry         string
-	Records       []map[string]interface{}
+	Records       Events
 	OriginalEvent interface{}
 	Log           *zap.SugaredLogger
 }
@@ -14,6 +14,6 @@ type Event struct {
 // Source represents a source of events.
 type Source interface {
 	Consume() <-chan *Event
-	EventProcessed()
+	Processed(e *Event) error
 	Close() error
 }

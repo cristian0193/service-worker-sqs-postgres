@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	_ "gorm.io/gorm/logger"
+	"service-template-golang/domain/entity"
 	"time"
 )
 
@@ -66,6 +67,12 @@ func (client *ClientDB) Open() error {
 		sqlDB.SetConnMaxLifetime(5 * time.Minute)
 		sqlDB.SetConnMaxIdleTime(10)
 		sqlDB.SetMaxOpenConns(10)
+
+		err = dbs.AutoMigrate(entity.Events{})
+		if err != nil {
+			return errors.Wrapf(err, "error migrating database : %v", err.Error())
+		}
+
 		client.DB = dbs
 	}
 

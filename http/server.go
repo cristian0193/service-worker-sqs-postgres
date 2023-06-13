@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"service-template-golang/http/controllers"
 	"time"
 
 	"github.com/labstack/echo"
@@ -20,13 +21,13 @@ type Server struct {
 	port      int
 }
 
-type healthResponse struct {
+type HealthResponse struct {
 	Status    string    `json:"status"`
 	StartedAt time.Time `json:"started_at"`
 }
 
 // NewServer creates an instance of Http Server.
-func NewServer(port int) *Server {
+func NewServer(port int, ec *controllers.EventsController) *Server {
 	e := echo.New()
 
 	// middleware
@@ -36,20 +37,15 @@ func NewServer(port int) *Server {
 	// routes prefix
 	path := e.Group(rootPrefix)
 
-	server := &Server{server: e, startedAt: time.Now(), port: port}
+	server := &Server{server: e, port: port}
 
-	// healthcheck route
-	path.GET("/health", server.health)
+	// events
+	path.GET("/sqs/:id", ec.GetID)
 
 	return server
 }
 
-func (s *Server) health(c echo.Context) error {
-	r := &healthResponse{Status: "OK", StartedAt: s.startedAt}
-	return c.JSON(http.StatusOK, r)
-}
-
-// Start runs an http server.
+// Start runs a http server.
 func (s *Server) Start() error {
 	port := fmt.Sprintf(":%v", s.port)
 

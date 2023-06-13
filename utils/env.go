@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
+	"github.com/labstack/echo"
 	"os"
 	"strconv"
 )
@@ -24,4 +26,12 @@ func GetInt(name string) (int, error) {
 		return 0, fmt.Errorf("en var %s must be a number", name)
 	}
 	return intV, nil
+}
+
+func GetParam(c echo.Context, name string) (string, error) {
+	strParam := c.Param(name)
+	if strParam == "" {
+		return strParam, errors.New(fmt.Sprintf("param '%s' is required", name))
+	}
+	return strParam, nil
 }
