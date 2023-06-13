@@ -136,7 +136,7 @@ curl --location --request GET 'http://localhost:8080/sqs/:id'
   {
     "id": "7a312c5a-e69e-4935-9b33-5dc33919a76f",
     "message": "Hola Mundo!!",
-    "date": "2023-06-13 02:47:41.387484 -0500 -05 m=+12.382310052"
+    "date": "2023-06-13T17:48:05-05:00"
   }
 ```
 
