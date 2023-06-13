@@ -4,16 +4,17 @@ import (
 	"github.com/labstack/echo"
 	"net/http"
 	"service-template-golang/domain/entity"
+	"service-template-golang/http/services"
 	env "service-template-golang/utils"
 )
 
 // EventsController encapsulates all the data necessary for the implementation of the EventsService.
 type EventsController struct {
-	eventsService entity.EventsService
+	eventsService services.EventsService
 }
 
 // NewEventsController instantiate a new event controller.
-func NewEventsController(es entity.EventsService) *EventsController {
+func NewEventsController(es services.EventsService) *EventsController {
 	return &EventsController{
 		eventsService: es,
 	}

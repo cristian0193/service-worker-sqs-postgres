@@ -21,11 +21,6 @@ type Server struct {
 	port      int
 }
 
-type HealthResponse struct {
-	Status    string    `json:"status"`
-	StartedAt time.Time `json:"started_at"`
-}
-
 // NewServer creates an instance of Http Server.
 func NewServer(port int, ec *controllers.EventsController) *Server {
 	e := echo.New()
@@ -34,10 +29,10 @@ func NewServer(port int, ec *controllers.EventsController) *Server {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
-	// routes prefix
-	path := e.Group(rootPrefix)
-
 	server := &Server{server: e, port: port}
+
+	// prefix
+	path := e.Group(rootPrefix)
 
 	// events
 	path.GET("/sqs/:id", ec.GetID)

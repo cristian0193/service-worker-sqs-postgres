@@ -6,8 +6,8 @@ import (
 	"service-template-golang/cmd/builder"
 	"service-template-golang/http"
 	"service-template-golang/http/controllers"
-	"service-template-golang/http/repository"
-	"service-template-golang/http/services"
+	"service-template-golang/http/repository/impl"
+	impl2 "service-template-golang/http/services/impl"
 	"syscall"
 )
 
@@ -50,10 +50,10 @@ func main() {
 	go processor.Start()
 
 	// repositories are initialized
-	eventsRepository := repository.NewEventsRepository(db)
+	eventsRepository := impl.NewEventsRepository(db)
 
 	// services are initialized
-	eventsService := services.NewEventsService(eventsRepository)
+	eventsService := impl2.NewEventsService(eventsRepository)
 
 	// controllers are initialized
 	eventsController := controllers.NewEventsController(eventsService)

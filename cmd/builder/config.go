@@ -2,6 +2,7 @@ package builder
 
 import env "service-template-golang/utils"
 
+// Configuration represents parameters of application.
 type Configuration struct {
 	Port                 int
 	ApplicationID        string
@@ -19,6 +20,7 @@ type Configuration struct {
 	DBPassword           string
 }
 
+// LoadConfig get all the configuration variables for the implemented services.
 func LoadConfig() (*Configuration, error) {
 	applicationID, err := env.GetString("APPLICATION_ID")
 	if err != nil {

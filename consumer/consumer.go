@@ -76,17 +76,18 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 	}
 
 	logger := s.log.With("retry", retry)
-	logger.Infof("Start to process SQS event")
+	logger.Infof("Step 1 - Start to process SQS event")
 
 	eventDB := &entity.Events{
 		ID:      *msg.MessageId,
 		Message: records.Message,
-		Date:    time.Now().String(),
+		Date:    time.Now().Format(time.RFC3339),
 	}
 
 	if err = s.insertMessage(eventDB); err != nil {
-		logger.Infof("error in insertMessage: %v", err)
+		logger.Errorf("Error inserting message: %v", err)
 	}
+	logger.Info("Step 2 - Event saved in database")
 
 	event := &domain.Event{
 		ID:            *msg.MessageId,
@@ -96,7 +97,7 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 		Log:           s.log,
 	}
 	s.wg.Add(1)
-	logger.Infof("Event produced for ID = %s)", event.ID)
+	logger.Infof("Step 3 - Event produced for ID = %s)", event.ID)
 	out <- event
 }
 
@@ -122,10 +123,10 @@ func (s *SQSSource) Processed(event *domain.Event) error {
 			logger.Errorf("error deleting of sqs message. %v", err)
 			return err
 		}
-		logger.Infof("successful deleted sqs message")
+		logger.Infof("Step 4 - Successful deleted sqs message")
 		return nil
 	}
-	logger.Warnf("event isn't sqs message")
+	logger.Warnf("Event isn't sqs message")
 	return nil
 }
 

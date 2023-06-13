@@ -1,20 +1,8 @@
 package services
 
-import (
-	"service-template-golang/domain/entity"
-	"service-template-golang/http/repository"
-)
+import "service-template-golang/domain/entity"
 
-type EventsService struct {
-	eventRepository *repository.EventsRepository
-}
-
-func NewEventsService(er *repository.EventsRepository) *EventsService {
-	return &EventsService{
-		eventRepository: er,
-	}
-}
-
-func (es *EventsService) GetID(ID string) (*entity.Events, error) {
-	return es.eventRepository.GetID(ID)
+// EventsService implementation of interfaces.
+type EventsService interface {
+	GetID(ID string) (*entity.Events, error)
 }

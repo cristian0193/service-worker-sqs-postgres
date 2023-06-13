@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// ClientDB represents RDS client.
+// ClientDB represents DB client.
 type ClientDB struct {
 	DB     *gorm.DB
 	params Params
@@ -25,7 +25,7 @@ type Params struct {
 	port     string
 }
 
-// NewDBClient instances of a Client to connect RDS postgresql with session as parameter.
+// NewDBClient instances of a Client to connect postgresql with parameters.
 func NewDBClient(host, username, password, name, port string) *ClientDB {
 	return &ClientDB{
 		params: Params{
@@ -55,13 +55,13 @@ func (client *ClientDB) Open() error {
 			CreateBatchSize:        1000,
 		})
 		if err != nil {
-			return errors.Wrapf(err, "error opening database file: %v", err.Error())
+			return errors.Wrapf(err, "Error opening database file: %v", err.Error())
 		}
 
 		dbs := db.Session(&gorm.Session{CreateBatchSize: 1000})
 		sqlDB, err := dbs.DB()
 		if err != nil {
-			return errors.Wrapf(err, "error instance database : %v", err.Error())
+			return errors.Wrapf(err, "Error instance database : %v", err.Error())
 		}
 
 		sqlDB.SetConnMaxLifetime(5 * time.Minute)
@@ -70,7 +70,7 @@ func (client *ClientDB) Open() error {
 
 		err = dbs.AutoMigrate(entity.Events{})
 		if err != nil {
-			return errors.Wrapf(err, "error migrating database : %v", err.Error())
+			return errors.Wrapf(err, "Error migrating database : %v", err.Error())
 		}
 
 		client.DB = dbs

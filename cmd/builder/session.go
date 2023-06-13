@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+// NewSession define all configuration to instantiate a session aws.
 func NewSession(config *Configuration) (*session.Session, error) {
 	sqsSessionConfig := &aws.Config{
 		Region:      aws.String(config.Region),
@@ -17,5 +18,6 @@ func NewSession(config *Configuration) (*session.Session, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return session.Must(sess, err), nil
 }

@@ -42,6 +42,7 @@ Las siguientes dependencias se utilizan en el desarrollo para llevar a cabo depl
 **Framework**
 
 * [Echo](https://echo.labstack.com/)
+* [Gorm](https://gorm.io/)
 
 **Servicios AWS**
 
@@ -56,6 +57,7 @@ Las siguientes dependencias se utilizan en el desarrollo para llevar a cabo depl
 
 Para del proyecto se toma como base los principios de las arquitecturas limpias, utilizando en este caso gran parte del concepto de **arquitectura multicapas**, lo cual permite la independencia de frameworks, entidades externas y UI, por medio de capas con responsabilidad únicas que permite ser testeables mediante el uso de sus interfaces. Como parte de las buenas prácticas la solución cuenta en su gran mayoría con la aplicación de los principios SOLID, garantizando un código limpio, mantenible, reutilizable y escalable.
 
+
 <a name="estructura-del-proyecto"></a>
 ### * **Estructura del proyecto** 🧱
 
@@ -64,7 +66,12 @@ Para del proyecto se toma como base los principios de las arquitecturas limpias,
 - [x] `cmd/`: administra los recursos de llamados al api
   - [ ] `builder/`: construye cada una de las instancias transversales
 - [x] `consumer/`: define la logica para obtener los mensajes desde el consumidor
+- [x] `database/`: define la logica para obtener la conexion a base de datos (postgresql)
 - [x] `domain/`: administracion de los datos de manera transversal
+- [x] `http/`: administra los clientes api-rest
+  - [ ] `controllers/`: define los handler 
+  - [ ] `services/`: define los services asociados a los repositorios
+  - [ ] `repository/`: define las consultas, actializacion o inserciones a la base de datos
 - [x] `processor/`: define el inicio del proceso para la lectura de mensajes desde SQS
 - [x] `utils/`: define las funciones transversales
 
@@ -76,7 +83,7 @@ Para la fase de despliegue a nivel local, se utilizaron algunas herramientas que
 > **Nota:** Para el proceso se deben definir las variables de ambiente que nos permite establecer conexion a los diferentes servicios.
 
 ```
-APPLICATION_ID=service-template-golang
+APPLICATION_ID=
 SERVER_PORT=
 LOG_LEVEL=INFO
 
@@ -85,8 +92,8 @@ AWS_SECRET_KEY=
 AWS_REGION=
 
 AWS_SQS_URL=
-AWS_SQS_MAX_MESSAGES=10
-AWS_SQS_VISIBILITY_TIMEOUT=60
+AWS_SQS_MAX_MESSAGES=
+AWS_SQS_VISIBILITY_TIMEOUT=
 
 DB_PORT=
 DB_HOST=
@@ -96,11 +103,9 @@ DB_PASSWORD=
 ```
 
 <a name="local"></a>
-### * **Local**
+### * **Local** 
 
 En el proceso local podemos utilizar despliegues de contenedores con postgres RDS o local.
-
-Luego de tener instalado los servicios externos, ejecute el script de base de datos ubicado en **service-template-golang/database/script.sql**
 
     1. Instalacion postgres local o aws (rds)
         - docker pull postgres
@@ -118,7 +123,7 @@ Luego de tener instalado los servicios externos, ejecute el script de base de da
     7. Puerto :8080 run
 
 <a name="endpoints"></a>
-# Endpoints
+# Endpoints 🤖
 
 - **GET**    http://localhost:8080/sqs/:id
 ```
@@ -135,7 +140,7 @@ curl --location --request GET 'http://localhost:8080/sqs/:id'
 ```
 
 <a name="queues"></a>
-# Queues
+# Queues 📨
 
 - **URL**    https://sqs.us-east-1.amazonaws.com/XXXXXXXX/sqs-service-template-golang
 

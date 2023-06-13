@@ -6,6 +6,7 @@ import (
 	"log"
 )
 
+// NewLogger defines all configurations to instantiate a log.
 func NewLogger() *zap.SugaredLogger {
 	config := zap.NewProductionConfig()
 	config.Encoding = "console"
@@ -25,6 +26,7 @@ func NewLogger() *zap.SugaredLogger {
 	return logger.Sugar()
 }
 
+// Sync defines the synchronization between generated logs.
 func Sync(log *zap.SugaredLogger) {
 	_ = log.Sync()
 }
