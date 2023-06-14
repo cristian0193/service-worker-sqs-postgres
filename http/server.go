@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-const rootPrefix = "/service-template-golang"
+const rootPrefix = "/service-worker-sqs-postgres"
 
 // Server is an instance of Http Server for Rest endpoints.
 type Server struct {
