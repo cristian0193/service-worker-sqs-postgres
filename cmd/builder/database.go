@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"service-template-golang/database"
+	"service-worker-sqs-postgres/database"
 )
 
 // NewDB defines all configurations to instantiate a database client.

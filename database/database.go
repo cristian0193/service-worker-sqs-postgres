@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	_ "gorm.io/gorm/logger"
-	"service-template-golang/domain/entity"
+	"service-worker-sqs-postgres/domain/entity"
 	"time"
 )
 

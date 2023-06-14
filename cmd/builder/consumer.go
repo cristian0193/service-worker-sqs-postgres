@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"go.uber.org/zap"
-	"service-template-golang/clients/awssqs"
-	"service-template-golang/consumer"
-	"service-template-golang/database"
-	"service-template-golang/domain"
+	"service-worker-sqs-postgres/clients/awssqs"
+	"service-worker-sqs-postgres/consumer"
+	"service-worker-sqs-postgres/database"
+	"service-worker-sqs-postgres/domain"
 )
 
 // NewSQS define all services to instantiate SQS.

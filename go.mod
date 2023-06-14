@@ -1,4 +1,4 @@
-module service-template-golang
+module service-worker-sqs-postgres
 
 go 1.19
 

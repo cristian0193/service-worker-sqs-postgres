@@ -2,9 +2,9 @@ package builder
 
 import (
 	"go.uber.org/zap"
-	"service-template-golang/database"
-	"service-template-golang/domain"
-	"service-template-golang/processor"
+	"service-worker-sqs-postgres/database"
+	"service-worker-sqs-postgres/domain"
+	"service-worker-sqs-postgres/processor"
 )
 
 // NewProcessor define all services to be instantiated Processor associated with the consumer.

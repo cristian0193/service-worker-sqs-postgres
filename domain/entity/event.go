@@ -1,6 +1,6 @@
 package entity
 
-import "service-template-golang/domain"
+import "service-worker-sqs-postgres/domain"
 
 // Events represents the entity.
 type Events struct {

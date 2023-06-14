@@ -3,9 +3,9 @@ package controllers
 import (
 	"github.com/labstack/echo"
 	"net/http"
-	"service-template-golang/domain/entity"
-	"service-template-golang/http/services"
-	env "service-template-golang/utils"
+	"service-worker-sqs-postgres/domain/entity"
+	"service-worker-sqs-postgres/http/services"
+	env "service-worker-sqs-postgres/utils"
 )
 
 // EventsController encapsulates all the data necessary for the implementation of the EventsService.

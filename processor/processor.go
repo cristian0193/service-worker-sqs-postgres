@@ -2,8 +2,8 @@ package processor
 
 import (
 	"go.uber.org/zap"
-	"service-template-golang/database"
-	"service-template-golang/domain"
+	"service-worker-sqs-postgres/database"
+	"service-worker-sqs-postgres/domain"
 	"time"
 )
 

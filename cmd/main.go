@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 	"os/signal"
-	"service-template-golang/cmd/builder"
-	"service-template-golang/http"
-	"service-template-golang/http/controllers"
-	"service-template-golang/http/repository/impl"
-	impl2 "service-template-golang/http/services/impl"
+	"service-worker-sqs-postgres/cmd/builder"
+	"service-worker-sqs-postgres/http"
+	"service-worker-sqs-postgres/http/controllers"
+	"service-worker-sqs-postgres/http/repository/impl"
+	impl2 "service-worker-sqs-postgres/http/services/impl"
 	"syscall"
 )
 
@@ -15,7 +15,7 @@ func main() {
 
 	// logger is initialized
 	logger := builder.NewLogger()
-	logger.Info("Starting service-template-golang ...")
+	logger.Info("Starting service-worker-sqs-postgres ...")
 	defer builder.Sync(logger)
 
 	// config is initialized
@@ -78,6 +78,6 @@ func main() {
 		logger.Error("error Stopping Server: %v", err)
 	}
 
-	logger.Info("service-template-golang ended")
+	logger.Info("service-worker-sqs-postgres ended")
 
 }

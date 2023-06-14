@@ -1,6 +1,6 @@
 package repository
 
-import "service-template-golang/domain/entity"
+import "service-worker-sqs-postgres/domain/entity"
 
 // EventsRepository implementation of interfaces.
 type EventsRepository interface {

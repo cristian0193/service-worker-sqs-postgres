@@ -1,6 +1,6 @@
 package services
 
-import "service-template-golang/domain/entity"
+import "service-worker-sqs-postgres/domain/entity"
 
 // EventsService implementation of interfaces.
 type EventsService interface {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"service-template-golang/http/controllers"
+	"service-worker-sqs-postgres/http/controllers"
 	"time"
 
 	"github.com/labstack/echo"

@@ -57,7 +57,7 @@ Las siguientes dependencias se utilizan en el desarrollo para llevar a cabo depl
 
 Para del proyecto se toma como base los principios de las arquitecturas limpias, utilizando en este caso gran parte del concepto de **arquitectura multicapas**, lo cual permite la independencia de frameworks, entidades externas y UI, por medio de capas con responsabilidad únicas que permite ser testeables mediante el uso de sus interfaces. Como parte de las buenas prácticas la solución cuenta en su gran mayoría con la aplicación de los principios SOLID, garantizando un código limpio, mantenible, reutilizable y escalable.
 
-![service-template-golang](https://github.com/cristian0193/service-worker-sqs-postgres/assets/11803196/7d79f234-cfd9-4043-baf4-ea4ecbd61d99)
+![service-worker-sqs-postgres](https://github.com/cristian0193/service-worker-sqs-postgres/assets/11803196/7d79f234-cfd9-4043-baf4-ea4ecbd61d99)
 
 
 <a name="estructura-del-proyecto"></a>
@@ -144,7 +144,7 @@ curl --location --request GET 'http://localhost:8080/sqs/:id'
 <a name="queues"></a>
 # Queues 📨
 
-- **URL**    https://sqs.us-east-1.amazonaws.com/XXXXXXXX/sqs-service-template-golang
+- **URL**    https://sqs.us-east-1.amazonaws.com/XXXXXXXX/service-worker-sqs-postgres
 
 
 - **Message**

@@ -1,8 +1,8 @@
 package impl
 
 import (
-	"service-template-golang/domain/entity"
-	"service-template-golang/http/repository"
+	"service-worker-sqs-postgres/domain/entity"
+	"service-worker-sqs-postgres/http/repository"
 )
 
 // EventsServiceImpl encapsulates all the data necessary for the implementation of the EventsRepository.

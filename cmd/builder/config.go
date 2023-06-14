@@ -1,6 +1,6 @@
 package builder
 
-import env "service-template-golang/utils"
+import env "service-worker-sqs-postgres/utils"
 
 // Configuration represents parameters of application.
 type Configuration struct {
