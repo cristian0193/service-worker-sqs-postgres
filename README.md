@@ -150,7 +150,7 @@ curl --location --request GET 'http://localhost:8080/sqs/:id'
 - **Message**
 ```
     {
-      "msg": "Hello World"
+      "message": "Hello World"
     }
 ```
 
