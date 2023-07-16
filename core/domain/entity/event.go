@@ -16,7 +16,7 @@ func (Events) TableName() string {
 	return "events"
 }
 
-// ToDomainEvents convert domain event to model the database events .
+// ToDomainEvents convert domain event to model the postgres events .
 func (e Events) ToDomainEvents() *domain.Events {
 	return &domain.Events{
 		ID:      e.ID,

@@ -2,7 +2,7 @@ package events
 
 import (
 	"service-worker-sqs-postgres/core/domain/entity"
-	"service-worker-sqs-postgres/dataproviders/database/repository/events"
+	"service-worker-sqs-postgres/dataproviders/repository/events"
 )
 
 type IEventsCaseUses interface {

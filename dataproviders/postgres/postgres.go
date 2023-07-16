@@ -1,4 +1,4 @@
-package database
+package postgres
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ func NewDBClient(host, username, password, name, port string) *ClientDB {
 	}
 }
 
-// Open the database connection only the first time. The next times, it maintains the same connection.
+// Open the postgres connection only the first time. The next times, it maintains the same connection.
 func (client *ClientDB) Open() error {
 
 	connString := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
@@ -55,13 +55,13 @@ func (client *ClientDB) Open() error {
 			CreateBatchSize:        1000,
 		})
 		if err != nil {
-			return errors.Wrapf(err, "Error opening database file: %v", err.Error())
+			return errors.Wrapf(err, "Error opening postgres file: %v", err.Error())
 		}
 
 		dbs := db.Session(&gorm.Session{CreateBatchSize: 1000})
 		sqlDB, err := dbs.DB()
 		if err != nil {
-			return errors.Wrapf(err, "Error instance database : %v", err.Error())
+			return errors.Wrapf(err, "Error instance postgres : %v", err.Error())
 		}
 
 		sqlDB.SetConnMaxLifetime(5 * time.Minute)
@@ -70,7 +70,7 @@ func (client *ClientDB) Open() error {
 
 		err = dbs.AutoMigrate(entity.Events{})
 		if err != nil {
-			return errors.Wrapf(err, "Error migrating database : %v", err.Error())
+			return errors.Wrapf(err, "Error migrating postgres : %v", err.Error())
 		}
 
 		client.DB = dbs

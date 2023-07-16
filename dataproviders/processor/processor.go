@@ -3,23 +3,23 @@ package processor
 import (
 	"go.uber.org/zap"
 	"service-worker-sqs-postgres/core/domain"
-	"service-worker-sqs-postgres/dataproviders/database"
+	"service-worker-sqs-postgres/dataproviders/repository/events"
 	"time"
 )
 
 // Processor represents a process.
 type Processor struct {
-	logger   *zap.SugaredLogger
-	source   domain.Source
-	clientDB *database.ClientDB
+	logger *zap.SugaredLogger
+	source domain.Source
+	er     *events.EventsRepository
 }
 
 // New instance a new processor.
-func New(logger *zap.SugaredLogger, source domain.Source, db *database.ClientDB) (*Processor, error) {
+func New(logger *zap.SugaredLogger, source domain.Source, er *events.EventsRepository) (*Processor, error) {
 	return &Processor{
-		logger:   logger,
-		source:   source,
-		clientDB: db,
+		logger: logger,
+		source: source,
+		er:     er,
 	}, nil
 }
 

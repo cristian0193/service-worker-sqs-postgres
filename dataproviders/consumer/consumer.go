@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"go.uber.org/zap"
-	"gorm.io/gorm/clause"
 	domain2 "service-worker-sqs-postgres/core/domain"
 	"service-worker-sqs-postgres/core/domain/entity"
 	"service-worker-sqs-postgres/dataproviders/awssqs"
-	"service-worker-sqs-postgres/dataproviders/database"
+	repository "service-worker-sqs-postgres/dataproviders/repository/events"
 	"sync"
 	"time"
 )
@@ -19,17 +18,18 @@ type SQSSource struct {
 	log         *zap.SugaredLogger
 	maxMessages int
 	closed      bool
-	db          *database.ClientDB
-	wg          sync.WaitGroup
+	//db          *postgres.ClientDB
+	repo repository.IEventsRepository
+	wg   sync.WaitGroup
 }
 
 // New return an event stream instance from SQS.
-func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int, db *database.ClientDB) (*SQSSource, error) {
+func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int, repo repository.IEventsRepository) (*SQSSource, error) {
 	return &SQSSource{
 		sqs:         sqsClient,
 		log:         logger,
 		maxMessages: maxMessages,
-		db:          db,
+		repo:        repo,
 		wg:          sync.WaitGroup{},
 	}, nil
 }
@@ -84,10 +84,10 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain2.Event) {
 		Date:    time.Now().Format(time.RFC3339),
 	}
 
-	if err = s.insertMessage(eventDB); err != nil {
+	if err = s.repo.Insert(eventDB); err != nil {
 		logger.Errorf("Error inserting message: %v", err)
 	}
-	logger.Info("Step 2 - Event saved in database")
+	logger.Info("Step 2 - Event saved in postgres")
 
 	event := &domain2.Event{
 		ID:            *msg.MessageId,
@@ -99,18 +99,6 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain2.Event) {
 	s.wg.Add(1)
 	logger.Infof("Step 3 - Event produced for ID = %s)", event.ID)
 	out <- event
-}
-
-// insertMessage insert message in database.
-func (s *SQSSource) insertMessage(events *entity.Events) error {
-	r := s.db.DB.Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(&events)
-	if r.Error != nil {
-		r.Rollback()
-		return r.Error
-	}
-	return nil
 }
 
 // Processed notify that event of consolidate file was processed.

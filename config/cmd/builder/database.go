@@ -1,12 +1,12 @@
 package builder
 
 import (
-	"service-worker-sqs-postgres/dataproviders/database"
+	"service-worker-sqs-postgres/dataproviders/postgres"
 )
 
-// NewDB defines all configurations to instantiate a database client.
-func NewDB(config *Configuration) (*database.ClientDB, error) {
-	db := database.NewDBClient(config.DBHost, config.DBUsername, config.DBPassword, config.DBName, config.DBPort)
+// NewDB defines all configurations to instantiate a postgres client.
+func NewDB(config *Configuration) (*postgres.ClientDB, error) {
+	db := postgres.NewDBClient(config.DBHost, config.DBUsername, config.DBPassword, config.DBName, config.DBPort)
 	err := db.Open()
 
 	return db, err

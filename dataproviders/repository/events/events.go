@@ -1,22 +1,24 @@
 package events
 
 import (
+	"gorm.io/gorm/clause"
 	"service-worker-sqs-postgres/core/domain/entity"
 	"service-worker-sqs-postgres/core/domain/exceptions"
-	"service-worker-sqs-postgres/dataproviders/database"
+	"service-worker-sqs-postgres/dataproviders/postgres"
 )
 
 type IEventsRepository interface {
 	GetID(ID string) (*entity.Events, error)
+	Insert(events *entity.Events) error
 }
 
 // EventsRepository encapsulates all the data needed to the persistence in the event table.
 type EventsRepository struct {
-	db *database.ClientDB
+	db *postgres.ClientDB
 }
 
-// NewEventsRepository instance the connection to the database.
-func NewEventsRepository(db *database.ClientDB) *EventsRepository {
+// NewEventsRepository instance the connection to the postgres.
+func NewEventsRepository(db *postgres.ClientDB) *EventsRepository {
 	return &EventsRepository{
 		db: db,
 	}
@@ -32,4 +34,16 @@ func (er *EventsRepository) GetID(ID string) (*entity.Events, error) {
 	}
 
 	return event, nil
+}
+
+// Insert records an event in the database.
+func (er *EventsRepository) Insert(events *entity.Events) error {
+	r := er.db.DB.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&events)
+	if r.Error != nil {
+		r.Rollback()
+		return r.Error
+	}
+	return nil
 }
