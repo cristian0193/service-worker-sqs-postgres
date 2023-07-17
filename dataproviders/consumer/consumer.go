@@ -18,9 +18,8 @@ type SQSSource struct {
 	log         *zap.SugaredLogger
 	maxMessages int
 	closed      bool
-	//db          *postgres.ClientDB
-	repo repository.IEventsRepository
-	wg   sync.WaitGroup
+	repo        repository.IEventsRepository
+	wg          sync.WaitGroup
 }
 
 // New return an event stream instance from SQS.

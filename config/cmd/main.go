@@ -52,7 +52,7 @@ func main() {
 	}
 
 	// processor is initialized
-	processor, err := builder.NewProcessor(logger, sqs, eventsRepository)
+	processor, err := builder.NewProcessor(logger, sqs)
 	if err != nil {
 		logger.Fatalf("error in Processor : %v", err)
 	}
