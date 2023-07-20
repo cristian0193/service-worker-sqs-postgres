@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"go.uber.org/zap"
-	domain2 "service-worker-sqs-postgres/core/domain"
+	"service-worker-sqs-postgres/core/domain"
 	"service-worker-sqs-postgres/core/domain/entity"
 	"service-worker-sqs-postgres/dataproviders/awssqs"
-	repository "service-worker-sqs-postgres/dataproviders/repository/events"
+	repository "service-worker-sqs-postgres/dataproviders/postgres/repository/events"
 	"sync"
 	"time"
 )
@@ -18,12 +18,12 @@ type SQSSource struct {
 	log         *zap.SugaredLogger
 	maxMessages int
 	closed      bool
-	repo        repository.IEventsRepository
+	repo        repository.IEventRepository
 	wg          sync.WaitGroup
 }
 
 // New return an event stream instance from SQS.
-func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int, repo repository.IEventsRepository) (*SQSSource, error) {
+func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int, repo repository.IEventRepository) (*SQSSource, error) {
 	return &SQSSource{
 		sqs:         sqsClient,
 		log:         logger,
@@ -34,8 +34,8 @@ func New(sqsClient *awssqs.ClientSQS, logger *zap.SugaredLogger, maxMessages int
 }
 
 // Consume opens a channel and sends entities created from SQS messages.
-func (s *SQSSource) Consume() <-chan *domain2.Event {
-	out := make(chan *domain2.Event, s.maxMessages)
+func (s *SQSSource) Consume() <-chan *domain.Event {
+	out := make(chan *domain.Event, s.maxMessages)
 	go func() {
 		for {
 			if s.closed {
@@ -61,8 +61,8 @@ func (s *SQSSource) Consume() <-chan *domain2.Event {
 }
 
 // processMessage read message in queue.
-func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain2.Event) {
-	var records domain2.Events
+func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
+	var records domain.Events
 	err := json.Unmarshal([]byte(*msg.Body), &records)
 	if err != nil {
 		s.log.Errorf("Error processing message from SQS: %v", err)
@@ -88,7 +88,7 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain2.Event) {
 	}
 	logger.Info("Step 2 - Event saved in postgres")
 
-	event := &domain2.Event{
+	event := &domain.Event{
 		ID:            *msg.MessageId,
 		Retry:         retry,
 		Records:       records,
@@ -101,7 +101,7 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain2.Event) {
 }
 
 // Processed notify that event of consolidate file was processed.
-func (s *SQSSource) Processed(event *domain2.Event) error {
+func (s *SQSSource) Processed(event *domain.Event) error {
 	defer s.wg.Done()
 	logger := event.Log
 

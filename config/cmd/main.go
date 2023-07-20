@@ -5,7 +5,7 @@ import (
 	"os/signal"
 	"service-worker-sqs-postgres/config/cmd/builder"
 	cases "service-worker-sqs-postgres/core/usecases/events"
-	repository "service-worker-sqs-postgres/dataproviders/repository/events"
+	repository "service-worker-sqs-postgres/dataproviders/postgres/repository/events"
 	"service-worker-sqs-postgres/dataproviders/server"
 	"service-worker-sqs-postgres/entrypoints/controllers/events"
 	"syscall"
@@ -37,16 +37,16 @@ func main() {
 	}
 
 	// repositories are initialized
-	eventsRepository := repository.NewEventsRepository(db)
+	eventRepository := repository.NewEventRepository(db)
 
 	// usecases are initialized
-	eventsUseCases := cases.NewEventsUseCases(eventsRepository)
+	eventUseCases := cases.NewEventUseCases(eventRepository)
 
 	// controllers are initialized
-	eventsController := events.NewEventsController(eventsUseCases)
+	eventController := events.NewEventController(eventUseCases)
 
 	// sqs is initialized
-	sqs, err := builder.NewSQS(logger, config, session, eventsRepository)
+	sqs, err := builder.NewSQS(logger, config, session, eventRepository)
 	if err != nil {
 		logger.Fatalf("error in SQS : %v", err)
 	}
@@ -59,7 +59,7 @@ func main() {
 	go processor.Start()
 
 	// server is initialized
-	srv := server.NewServer(config.Port, eventsController)
+	srv := server.NewServer(config.Port, eventController)
 	if err = srv.Start(); err != nil {
 		logger.Fatalf("error Starting Server: %v", err)
 	}
