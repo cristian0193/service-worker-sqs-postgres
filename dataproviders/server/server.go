@@ -22,7 +22,7 @@ type Server struct {
 }
 
 // NewServer creates an instance of Http Server.
-func NewServer(port int, ec *events.EventsController) *Server {
+func NewServer(port int, ec *events.EventController) *Server {
 	e := echo.New()
 
 	// middleware
