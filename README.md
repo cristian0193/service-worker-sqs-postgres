@@ -63,19 +63,22 @@ Para del proyecto se toma como base los principios de las arquitecturas limpias,
 <a name="estructura-del-proyecto"></a>
 ### * **Estructura del proyecto** 🧱
 
-- [x] `clients/`: contiene la implementacion de los clients externos
-  - [ ] `awssqs/`: define el cliente para aws sqs
-- [x] `cmd/`: administra los recursos de llamados al api
-  - [ ] `builder/`: construye cada una de las instancias transversales
-- [x] `consumer/`: define la logica para obtener los mensajes desde el consumidor
-- [x] `database/`: define la logica para obtener la conexion a base de datos (postgresql)
-- [x] `domain/`: administracion de los datos de manera transversal
-- [x] `http/`: administra los clientes api-rest
-  - [ ] `controllers/`: define los handler 
-  - [ ] `services/`: define los services asociados a los repositorios
-  - [ ] `repository/`: define las consultas, actializacion o inserciones a la base de datos
-- [x] `processor/`: define el inicio del proceso para la lectura de mensajes desde SQS
-- [x] `utils/`: define las funciones transversales
+- [x] `config/`: establece las configuraciones iniciales a los servicios
+    - [ ] `cmd/`: administra los recursos de llamados al api
+        - [ ] `builder/`: construye cada una de las instancias transversales
+- [x] `core/`: establece la logica de negocio
+    - [ ] `domain/`: administracion de los datos de manera transversal
+    - [ ] `usecases/`: define los casos de uso utilizados por el handler
+- [x] `dataproviders/`: contiene la implementacion de los clients externos
+    - [ ] `awssqs/`: define el cliente para aws sqs
+    - [ ] `consumer/`: define la logica para obtener los mensajes desde el consumidor
+    - [ ] `postgres/`: define el cliente que permite la conexion a base de dato
+      - [ ] `repository/`: define las consultas, actualizacion o inserciones a la base de datos
+    - [ ] `processor/`: define el inicio del proceso para la lectura de mensajes desde SQS 
+    - [ ] `server/`: define la configuracion para correr el server http
+    - [ ] `utils/`: define las funciones transversales
+- [x] `entrypoints/`: administra los recursos de llamados al api
+    - [ ] `controllers/`: define los handler
 
 <a name="despliegues"></a>
 # Despliegues 🚀
@@ -116,13 +119,11 @@ En el proceso local podemos utilizar despliegues de contenedores con postgres RD
     2. Creacion de SQS en AWS
         - https://aws.amazon.com/es/sqs/
 
-    3. La automigracion a nivel de gorm a las base de datos esta activa
+    3. Automigracion en gorm activa
 
-    4. Definir las variables de entorno definidas en (Despliegues)
+    4. Definir variables de entorno
 
-    6. Ejecutar el comando 'go run main.go'
-
-    7. Puerto :8080 run
+    6. Start 'go run main.go'
 
 <a name="endpoints"></a>
 # Endpoints 🤖
