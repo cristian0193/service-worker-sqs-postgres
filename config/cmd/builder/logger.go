@@ -15,8 +15,8 @@ func NewLogger() *zap.SugaredLogger {
 	config.EncoderConfig.TimeKey = "time"
 	config.EncoderConfig.LevelKey = "level"
 	config.EncoderConfig.MessageKey = "msg"
-	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	config.EncoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	config.EncoderConfig.EncodeTime = zapcore.RFC3339TimeEncoder
+	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	config.EncoderConfig.ConsoleSeparator = "  "
 
 	logger, err := config.Build()
