@@ -30,5 +30,5 @@ func (ec *EventController) GetID(c echo.Context) error {
 	if err != nil {
 		return exceptions.HandleServiceError(err)
 	}
-	return c.JSON(http.StatusOK, events.ToDomainEvents())
+	return c.JSON(http.StatusOK, events)
 }
