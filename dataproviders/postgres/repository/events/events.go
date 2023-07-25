@@ -7,6 +7,7 @@ import (
 	"service-worker-sqs-postgres/dataproviders/postgres"
 )
 
+// IEventRepository interface by repository.
 type IEventRepository interface {
 	GetID(ID string) (*entity.Events, error)
 	Insert(events *entity.Events) error
