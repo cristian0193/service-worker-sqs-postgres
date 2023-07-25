@@ -5,7 +5,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"go.uber.org/zap"
 	"service-worker-sqs-postgres/core/domain"
-	"service-worker-sqs-postgres/core/domain/entity"
 	"service-worker-sqs-postgres/dataproviders/awssqs"
 	repository "service-worker-sqs-postgres/dataproviders/postgres/repository/events"
 	"sync"
@@ -77,7 +76,7 @@ func (s *SQSSource) processMessage(msg *sqs.Message, out chan *domain.Event) {
 	logger := s.log.With("retry", retry)
 	logger.Infof("Step 1 - Start to process SQS event")
 
-	eventDB := &entity.Events{
+	eventDB := &domain.Events{
 		ID:      *msg.MessageId,
 		Message: records.Message,
 		Date:    time.Now().Format(time.RFC3339),
