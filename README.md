@@ -1,5 +1,7 @@
 # Service Worker SQS - Postgres
 
+![Diagrama1 1](https://github.com/cristian0193/service-worker-sqs-postgres/assets/11803196/950da780-50d2-4bca-aed9-ad7138c918a3)
+
 ## Tabla de contenido
 1. [Contexto](#contexto)
 2. [Tecnologías](#tecnologías)
@@ -57,7 +59,7 @@ Las siguientes dependencias se utilizan en el desarrollo para llevar a cabo depl
 
 Para del proyecto se toma como base los principios de las arquitecturas limpias, utilizando en este caso gran parte del concepto de **arquitectura multicapas**, lo cual permite la independencia de frameworks, entidades externas y UI, por medio de capas con responsabilidad únicas que permite ser testeables mediante el uso de sus interfaces. Como parte de las buenas prácticas la solución cuenta en su gran mayoría con la aplicación de los principios SOLID, garantizando un código limpio, mantenible, reutilizable y escalable.
 
-![service-worker-sqs-postgres](https://github.com/cristian0193/service-worker-sqs-postgres/assets/11803196/f066be29-3b5b-47b9-ad8b-24db04f05d52)
+![Diagrama1](https://github.com/cristian0193/service-worker-sqs-postgres/assets/11803196/16e57298-dc32-4a51-b89f-54bc036213be)
 
 
 <a name="estructura-del-proyecto"></a>
@@ -72,6 +74,7 @@ Para del proyecto se toma como base los principios de las arquitecturas limpias,
 - [x] `dataproviders/`: contiene la implementacion de los clients externos
     - [ ] `awssqs/`: define el cliente para aws sqs
     - [ ] `consumer/`: define la logica para obtener los mensajes desde el consumidor
+    - [ ] `mapper/`: transforma los dto a entity o viseversa
     - [ ] `postgres/`: define el cliente que permite la conexion a base de dato
       - [ ] `repository/`: define las consultas, actualizacion o inserciones a la base de datos
     - [ ] `processor/`: define el inicio del proceso para la lectura de mensajes desde SQS 
